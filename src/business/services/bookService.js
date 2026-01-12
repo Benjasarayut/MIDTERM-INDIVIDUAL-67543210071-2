@@ -1,92 +1,80 @@
 const bookRepository = require('../../data/repositories/bookRepository');
 const bookValidator = require('../validators/bookValidator');
-const { ValidationError, NotFoundError, ConflictError } = require('../errors');
 
 class BookService {
     async getAllBooks(status = null) {
-        if (status) {
-            const validStatuses = ['available', 'borrowed'];
-            if (!validStatuses.includes(status)) {
-                throw new ValidationError('Invalid status filter');
-            }
-        }
-
         const books = await bookRepository.findAll(status);
+        
+        // Business logic: คำนวณสถิติ
         const available = books.filter(b => b.status === 'available').length;
         const borrowed = books.filter(b => b.status === 'borrowed').length;
-
-        return { books, statistics: { available, borrowed, total: books.length } };
+        
+        return {
+            books: books,
+            statistics: { available, borrowed, total: books.length }
+        };
     }
 
     async getBookById(id) {
-        const numId = bookValidator.validateId(id);
-        const book = await bookRepository.findById(numId);
-        if (!book) throw new NotFoundError('Book not found');
+        bookValidator.validateId(id);
+        const book = await bookRepository.findById(id);
+        if (!book) {
+            throw new Error('Book not found');
+        }
         return book;
     }
 
     async createBook(bookData) {
         bookValidator.validateBookData(bookData);
         bookValidator.validateISBN(bookData.isbn);
-
-        try {
-            const created = await bookRepository.create(bookData);
-            return created;
-        } catch (err) {
-            if (err && err.message && err.message.includes('UNIQUE')) {
-                throw new ConflictError('ISBN already exists');
-            }
-            throw err;
-        }
+        return await bookRepository.create(bookData);
     }
 
     async updateBook(id, bookData) {
-        const numId = bookValidator.validateId(id);
+        bookValidator.validateId(id);
+        // เช็คว่ามีหนังสือไหมก่อน
+        const existingBook = await this.getBookById(id);
+        
         bookValidator.validateBookData(bookData);
         bookValidator.validateISBN(bookData.isbn);
-
-        const existing = await bookRepository.findById(numId);
-        if (!existing) throw new NotFoundError('Book not found');
-
-        try {
-            const updated = await bookRepository.update(numId, bookData);
-            return updated;
-        } catch (err) {
-            if (err && err.message && err.message.includes('UNIQUE')) {
-                throw new ConflictError('ISBN already exists');
-            }
-            throw err;
-        }
+        
+        return await bookRepository.update(id, bookData);
     }
 
     async borrowBook(id) {
-        const numId = bookValidator.validateId(id);
-        const book = await bookRepository.findById(numId);
-        if (!book) throw new NotFoundError('Book not found');
-        if (book.status === 'borrowed') throw new ValidationError('Book is already borrowed');
-
-        const updated = await bookRepository.updateStatus(numId, 'borrowed');
-        return updated;
+        bookValidator.validateId(id);
+        const book = await this.getBookById(id);
+        
+        // Business logic: check if already borrowed
+        if (book.status === 'borrowed') {
+            throw new Error('Book is already borrowed');
+        }
+        
+        return await bookRepository.updateStatus(id, 'borrowed');
     }
 
     async returnBook(id) {
-        const numId = bookValidator.validateId(id);
-        const book = await bookRepository.findById(numId);
-        if (!book) throw new NotFoundError('Book not found');
-        if (book.status !== 'borrowed') throw new ValidationError('Book is not borrowed');
-
-        const updated = await bookRepository.updateStatus(numId, 'available');
-        return updated;
+        bookValidator.validateId(id);
+        const book = await this.getBookById(id);
+        
+        // Business logic: check if not borrowed
+        if (book.status !== 'borrowed') {
+            throw new Error('Book is not borrowed');
+        }
+        
+        return await bookRepository.updateStatus(id, 'available');
     }
 
     async deleteBook(id) {
-        const numId = bookValidator.validateId(id);
-        const book = await bookRepository.findById(numId);
-        if (!book) throw new NotFoundError('Book not found');
-        if (book.status === 'borrowed') throw new ValidationError('Cannot delete borrowed book');
-
-        const result = await bookRepository.delete(numId);
-        return result;
+        bookValidator.validateId(id);
+        const book = await this.getBookById(id);
+        
+        // Business logic: cannot delete borrowed book
+        if (book.status === 'borrowed') {
+            throw new Error('Cannot delete borrowed book');
+        }
+        
+        return await bookRepository.delete(id);
     }
 }
 

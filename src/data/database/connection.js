@@ -1,13 +1,14 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const dbPath = path.join(__dirname, '../../../library.db');
+// ระบุตำแหน่งไฟล์ Database ให้แม่นยำ
+const dbPath = path.resolve(__dirname, '../../../library.db');
 
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
-        console.error('Database connection error:', err);
+        console.error('❌ Database connection error:', err);
     } else {
-        console.log('Connected to SQLite database');
+        console.log('✅ Connected to SQLite database at:', dbPath);
         initializeDatabase();
     }
 });

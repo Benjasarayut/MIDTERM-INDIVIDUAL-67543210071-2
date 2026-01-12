@@ -13,9 +13,8 @@ class BookController {
 
     async getBookById(req, res, next) {
         try {
-            const { id } = req.params;
-            const book = await bookService.getBookById(id);
-            res.json(book);
+            const result = await bookService.getBookById(req.params.id);
+            res.json(result);
         } catch (error) {
             next(error);
         }
@@ -23,9 +22,8 @@ class BookController {
 
     async createBook(req, res, next) {
         try {
-            const bookData = req.body;
-            const created = await bookService.createBook(bookData);
-            res.status(201).json(created);
+            const result = await bookService.createBook(req.body);
+            res.status(201).json(result);
         } catch (error) {
             next(error);
         }
@@ -33,10 +31,8 @@ class BookController {
 
     async updateBook(req, res, next) {
         try {
-            const { id } = req.params;
-            const bookData = req.body;
-            const updated = await bookService.updateBook(id, bookData);
-            res.json(updated);
+            const result = await bookService.updateBook(req.params.id, req.body);
+            res.json(result);
         } catch (error) {
             next(error);
         }
@@ -44,9 +40,8 @@ class BookController {
 
     async borrowBook(req, res, next) {
         try {
-            const { id } = req.params;
-            const updated = await bookService.borrowBook(id);
-            res.json(updated);
+            const result = await bookService.borrowBook(req.params.id);
+            res.json(result);
         } catch (error) {
             next(error);
         }
@@ -54,9 +49,8 @@ class BookController {
 
     async returnBook(req, res, next) {
         try {
-            const { id } = req.params;
-            const updated = await bookService.returnBook(id);
-            res.json(updated);
+            const result = await bookService.returnBook(req.params.id);
+            res.json(result);
         } catch (error) {
             next(error);
         }
@@ -64,8 +58,7 @@ class BookController {
 
     async deleteBook(req, res, next) {
         try {
-            const { id } = req.params;
-            const result = await bookService.deleteBook(id);
+            const result = await bookService.deleteBook(req.params.id);
             res.json(result);
         } catch (error) {
             next(error);

@@ -1,8 +1,6 @@
 const express = require('express');
 const bookRoutes = require('./src/presentation/routes/bookRoutes');
 const errorHandler = require('./src/presentation/middlewares/errorHandler');
-// Ensure DB connection initializes
-require('./src/data/database/connection');
 
 const app = express();
 
@@ -13,11 +11,11 @@ app.use(express.static('public'));
 // Routes
 app.use('/api/books', bookRoutes);
 
-// Error handling (must be last)
+// Error handling (ต้องอยู่ท้ายสุด)
 app.use(errorHandler);
 
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Library Management System running on http://localhost:${PORT}`);
 });

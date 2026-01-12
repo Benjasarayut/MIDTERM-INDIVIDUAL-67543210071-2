@@ -5,12 +5,12 @@ class BookRepository {
         return new Promise((resolve, reject) => {
             let sql = 'SELECT * FROM books';
             let params = [];
-
+            
             if (status) {
                 sql += ' WHERE status = ?';
                 params.push(status);
             }
-
+            
             db.all(sql, params, (err, rows) => {
                 if (err) reject(err);
                 else resolve(rows);
@@ -29,10 +29,8 @@ class BookRepository {
 
     async create(bookData) {
         const { title, author, isbn } = bookData;
-
         return new Promise((resolve, reject) => {
             const sql = 'INSERT INTO books (title, author, isbn) VALUES (?, ?, ?)';
-
             db.run(sql, [title, author, isbn], function(err) {
                 if (err) {
                     reject(err);
@@ -50,10 +48,10 @@ class BookRepository {
         const { title, author, isbn } = bookData;
         return new Promise((resolve, reject) => {
             const sql = 'UPDATE books SET title = ?, author = ?, isbn = ? WHERE id = ?';
-
             db.run(sql, [title, author, isbn, id], function(err) {
-                if (err) reject(err);
-                else {
+                if (err) {
+                    reject(err);
+                } else {
                     db.get('SELECT * FROM books WHERE id = ?', [id], (err, row) => {
                         if (err) reject(err);
                         else resolve(row);

@@ -1,114 +1,119 @@
-# Library Management System - Layered Architecture
+# 📚 Library Management System (Midterm Project)
 
-## 📋 Project Information
-- **Student Name:** [Your Name]
-- **Student ID:** 67543210071-6
-- **Course:** ENGSE207 Software Architecture
+รายวิชา: ENGSE207 Software Architecture
+สถาปัตยกรรม: **Layered Architecture (N-Tier)**
 
-## 🏗️ Architecture Style
-Layered Architecture (3-tier): Presentation, Business, Data
-
-## 📂 Project Structure
-```
-midterm-individual-67543210071-6/
-├── src/
-│   ├── presentation/
-│   │   ├── routes/
-│   │   ├── controllers/
-│   │   └── middlewares/
-│   ├── business/
-│   │   ├── services/
-│   │   └── validators/
-│   └── data/
-│       ├── repositories/
-│       └── database/
-├── server.js
-├── package.json
-├── library.db
-├── README.md
-└── ARCHITECTURE.md
-```
-
-## 🎯 Refactoring Summary
-
-### Problems in Monolithic version:
-- Single large file with mixed concerns (HTTP, business, data).
-# Library Management System - Layered Architecture
-
-## 📋 Project Information
-- **Student Name:** __________________________
-- **Student ID:** 67543210071-6
-- **Course:** ENGSE207 Software Architecture
-
-## 🏗️ Architecture Style
-Layered Architecture (3-tier): Presentation, Business, Data
-
-## 📂 Project Structure
-midterm-individual-67543210071-6/
-├── src/
-│   ├── presentation/
-│   │   ├── routes/
-│   │   ├── controllers/
-│   │   └── middlewares/
-│   ├── business/
-   │   ├── services/
-   │   └── validators/
-   └── data/
-	   ├── repositories/
-	   └── database/
-├── server.js
-├── package.json
-├── library.db
-├── README.md
-└── ARCHITECTURE.md
-
-## 🎯 Refactoring Summary
-
-### Problems in Monolithic version
-- Single large file with mixed concerns (HTTP handling, business logic, data access).
-- Hard to maintain and test; risk of merge conflicts when multiple developers edit the same file.
-- No clear boundaries for responsibilities.
-
-### How Layered Architecture fixes them
-- Separates concerns into Presentation, Business, and Data layers.
-- Each layer has clear responsibilities (routes/controllers, services/validators, repositories/database).
-- Easier to test, maintain, and extend; enables team collaboration.
-
-### Benefits
-- Improved maintainability and readability.
-- Easier to add features and refactor safely.
-- Clearer testing boundaries and fewer merge conflicts.
-
-## 🚀 How to Run
-
-```bash
-# 1. Install dependencies
-npm install
-
-# 2. Run server
-npm start
-
-# 3. API base URL
-http://localhost:3000/api/books
-```
-
-## 📝 API Endpoints
-- GET /api/books
-- GET /api/books/:id
-- POST /api/books
-- PUT /api/books/:id
-- PATCH /api/books/:id/borrow
-- PATCH /api/books/:id/return
-- DELETE /api/books/:id
-
-## 🗂️ Submission Checklist
-- [ ] `src/` folder with Presentation, Business, Data layers
-- [ ] `server.js` configured to mount routes and error handler
-- [ ] `README.md` and `ARCHITECTURE.md`
-- [ ] `.gitignore` excludes `node_modules/` and `*.db`
+## 📋 รายละเอียดผู้จัดทำ
+* **ชื่อ:** เบน (Ben)
+* **รหัสนักศึกษา:** 67543210071-6
+* **สาขา:** Software Engineering
+* **มหาวิทยาลัย:** Rajamangala University of Technology Lanna
 
 ---
 
-Fill in your name and student ID above before submitting.
+## 🛠️ Tech Stack
+* **Frontend:** HTML5, CSS3 (Custom Modern UI, Responsive)
+* **Backend:** Node.js
+* **Database:** SQLite3
+* **Architecture:** Layered Pattern (Presentation, Business, Data)
 
-# MIDTERM-INDIVIDUAL-67543210071-2
+---
+
+## 🚀 วิธีการรันโปรเจกต์ (Installation & Run)
+
+1. **ติดตั้ง Dependencies:**
+   ```bash
+   npm install
+รัน Server:
+
+Bash
+
+npm start
+เปิดใช้งาน:
+
+เปิด Browser ไปที่: http://localhost:3000
+
+หากใช้งานผ่านมือถือ (ในวง LAN เดียวกัน): http://<IP_ADDRESS>:3000
+
+✅ ฟีเจอร์หลัก (Features)
+CRUD Operations: เพิ่ม, ลบ, แก้ไข, และดูรายการหนังสือ
+
+Business Logic:
+
+ยืมหนังสือ (Borrow) - เปลี่ยนสถานะเป็น Borrowed
+
+คืนหนังสือ (Return) - เปลี่ยนสถานะเป็น Available
+
+ตรวจสอบเงื่อนไข (Validation) ก่อนบันทึกข้อมูล
+
+Responsive Design: รองรับการใช้งานทั้งบน PC และ Mobile
+
+Theme: รองรับ Dark Mode / Light Mode
+
+
+---
+
+### 2. สร้างไฟล์ `ARCHITECTURE.md` (เอกสารอธิบายโครงสร้าง)
+ไฟล์นี้สำคัญมากสำหรับวิชานี้ครับ เพราะมันอธิบายว่าคุณเข้าใจ "Layered Architecture" จริงๆ หรือไม่
+
+```markdown
+# 🏛️ Software Architecture Design
+
+โปรเจกต์นี้ถูกออกแบบโดยใช้รูปแบบ **Layered Architecture** เพื่อแยกส่วนรับผิดชอบ (Separation of Concerns) ออกเป็น 3 เลเยอร์หลัก ดังนี้:
+
+## 🏗️ Structure Overview
+
+```
+```
+graph TD
+    Client[Client / Browser] <--> Presentation[Presentation Layer]
+    Presentation <--> Business[Business Logic Layer]
+    Business <--> Data[Data Access Layer]
+    Data <--> DB[(SQLite Database)]
+```
+📂 Layer Details (รายละเอียดแต่ละชั้น)
+1. 🟢 Presentation Layer (Interface)
+Location: src/presentation/ ทำหน้าที่เป็นด่านหน้าในการรับ Request จากผู้ใช้ และส่ง Response กลับไป
+
+Routes (routes/bookRoutes.js): กำหนด Endpoint URL (เช่น GET /api/books, POST /api/books)
+
+Controllers (controllers/bookController.js): รับข้อมูลจาก HTTP Request, เรียกใช้ Service, และส่ง HTTP Response กลับไปหา Client
+
+2. 🔵 Business Logic Layer (Core)
+Location: src/business/ ทำหน้าที่ประมวลผลเงื่อนไขทางธุรกิจ (Business Rules) ทั้งหมด
+
+Services (services/bookService.js):
+
+ควบคุมขั้นตอนการทำงาน (Workflow)
+
+ตรวจสอบเงื่อนไข เช่น "หนังสือต้องว่างสถานะ Available ถึงจะยืมได้"
+
+คำนวณสถิติ (Available/Borrowed/Total)
+
+Validators (validators/): ตรวจสอบความถูกต้องของข้อมูล (Input Validation)
+
+3. 🟠 Data Access Layer (Infrastructure)
+Location: src/data/ ทำหน้าที่สื่อสารกับฐานข้อมูลโดยตรง โดยไม่สนใจ Business Logic
+
+Repositories (repositories/bookRepository.js): ประกอบด้วยคำสั่ง SQL (CRUD) เช่น SELECT, INSERT, UPDATE, DELETE
+
+Database Connection (database/connection.js): จัดการการเชื่อมต่อไฟล์ library.db
+
+🔄 Data Flow Example (ตัวอย่างการทำงาน)
+Scenario: ผู้ใช้กดยืมหนังสือ (Borrow Book)
+
+Request: Browser ส่ง PATCH /api/books/1/borrow มาที่ Server
+
+Presentation: BookController รับ Request แล้วส่ง ID ไปให้ BookService
+
+Business Logic:
+
+BookService ตรวจสอบว่าหนังสือเล่มนี้สถานะเป็น 'available' หรือไม่?
+
+ถ้าใช่ -> ส่งคำสั่งอัปเดตไปที่ Data Layer
+
+ถ้าไม่ -> ส่ง Error กลับไปทันที
+
+Data Access: BookRepository รัน SQL UPDATE books SET status='borrowed' WHERE id=1
+
+Response: Server ส่งข้อมูลสถานะล่าสุดกลับไปให้ Browser แสดงผล (ปุ่มเปลี่ยนเป็นสีส้ม Return)
